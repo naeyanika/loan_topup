@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import io
+from datetime import datetime
 
 st.title('Aplikasi Analisa Loan Top Up')
 st.markdown("""
@@ -40,6 +41,25 @@ def format_kelompok(kelompok):
     except (ValueError, TypeError):
         return str(kelompok)
 
+# Fungsi untuk format tanggal
+def format_date(date):
+    try:
+        if pd.isna(date):
+            return ''
+        if isinstance(date, str):
+            # Coba parse string tanggal dengan berbagai format
+            for fmt in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%d-%m-%Y']:
+                try:
+                    date = datetime.strptime(date, fmt)
+                    break
+                except ValueError:
+                    continue
+        if isinstance(date, datetime):
+            return date.strftime('%d-%m-%Y')
+        return date
+    except Exception:
+        return date
+
 # Fungsi untuk menghitung kolom validasi
 def calculate_validation(row):
     if row['JENIS TOP UP'] == 'REGULER':
@@ -52,6 +72,12 @@ uploaded_file = st.file_uploader("Unggah file Excel", type=["xlsx"])
 if uploaded_file is not None:
     # Membaca file Excel
     df1 = pd.read_excel(uploaded_file, engine='openpyxl')
+    
+    # Format kolom tanggal
+    date_columns = ['TGL CAIR PINJAMAN LAMA', 'TGL CAIR', 'LAPORAN SD TANGGAL']
+    for col in date_columns:
+        if col in df1.columns:
+            df1[col] = df1[col].apply(format_date)
     
     # Menambahkan kolom validasi
     df1['VALIDASI'] = df1.apply(calculate_validation, axis=1)
