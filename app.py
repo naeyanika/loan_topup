@@ -47,7 +47,6 @@ def format_date(date):
         if pd.isna(date):
             return ''
         if isinstance(date, str):
-            # Coba parse string tanggal dengan berbagai format
             for fmt in ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d', '%d-%m-%Y']:
                 try:
                     date = datetime.strptime(date, fmt)
@@ -82,18 +81,32 @@ if uploaded_file is not None:
     # Menambahkan kolom validasi
     df1['VALIDASI'] = df1.apply(calculate_validation, axis=1)
     
-    # Menambahkan filter untuk VALIDASI
-    st.subheader('Filter Data Validasi')
-    validation_filter = st.radio(
+    # Sidebar untuk filter
+    st.sidebar.header('Filter Data')
+    
+    # Filter BRANCHNAME
+    all_branches = ['Semua'] + sorted(df1['BRANCHNAME'].unique().tolist())
+    selected_branch = st.sidebar.selectbox('Pilih Branch:', all_branches)
+    
+    # Filter Validasi
+    validation_filter = st.sidebar.radio(
         "Pilih Status Validasi:",
         ('Semua', 'TRUE', 'FALSE')
     )
     
-    # Filter DataFrame berdasarkan pilihan
-    if validation_filter != 'Semua':
-        filtered_df = df1[df1['VALIDASI'] == validation_filter]
+    # Aplikasikan filter
+    if selected_branch != 'Semua':
+        filtered_df = df1[df1['BRANCHNAME'] == selected_branch]
     else:
         filtered_df = df1
+        
+    if validation_filter != 'Semua':
+        filtered_df = filtered_df[filtered_df['VALIDASI'] == validation_filter]
+    
+    # Menampilkan informasi filter yang aktif
+    st.subheader('Filter Aktif')
+    st.write(f"Branch: {selected_branch}")
+    st.write(f"Status Validasi: {validation_filter}")
     
     # Menampilkan jumlah data
     st.write(f"Jumlah data: {len(filtered_df)}")
