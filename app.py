@@ -47,21 +47,11 @@ def calculate_validation(row):
             return 'FALSE'
     return 'TRUE'
 
-uploaded_files = st.file_uploader("Unggah file Excel", accept_multiple_files=False, type=["xlsx"])
+uploaded_file = st.file_uploader("Unggah file Excel", type=["xlsx"])
 
-if uploaded_files:
-    dfs = {}
-    for file in uploaded_files:
-        df = pd.read_excel(file, engine='openpyxl')
-        dfs[file.name] = df
-
-@st.cache_data
-def load_excel(file):
-    return pd.read_excel(file, engine='openpyxl')
-
-# Proses Loan Top Up.
-if 'LoanTopUp_Report.xlsx' in dfs:
-    df1 = dfs['LoanTopUp_Report.xlsx']
+if uploaded_file is not None:
+    # Membaca file Excel
+    df1 = pd.read_excel(uploaded_file, engine='openpyxl')
     
     # Menambahkan kolom validasi
     df1['VALIDASI'] = df1.apply(calculate_validation, axis=1)
