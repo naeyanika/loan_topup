@@ -81,18 +81,24 @@ if uploaded_file is not None:
     # Menambahkan kolom validasi
     df1['VALIDASI'] = df1.apply(calculate_validation, axis=1)
     
-    # Sidebar untuk filter
-    st.sidebar.header('Filter Data')
+    # Filter Section
+    st.subheader('Filter Data')
     
-    # Filter BRANCHNAME
-    all_branches = ['Semua'] + sorted(df1['BRANCHNAME'].unique().tolist())
-    selected_branch = st.sidebar.selectbox('Pilih Branch:', all_branches)
+    # Buat dua kolom untuk filter
+    col1, col2 = st.columns(2)
     
-    # Filter Validasi
-    validation_filter = st.sidebar.radio(
-        "Pilih Status Validasi:",
-        ('Semua', 'TRUE', 'FALSE')
-    )
+    with col1:
+        # Filter BRANCHNAME
+        all_branches = ['Semua'] + sorted(df1['BRANCHNAME'].unique().tolist())
+        selected_branch = st.selectbox('Pilih Branch:', all_branches)
+    
+    with col2:
+        # Filter Validasi
+        validation_filter = st.radio(
+            "Pilih Status Validasi:",
+            ('Semua', 'TRUE', 'FALSE'),
+            horizontal=True  # Membuat radio button horizontal
+        )
     
     # Aplikasikan filter
     if selected_branch != 'Semua':
@@ -104,12 +110,10 @@ if uploaded_file is not None:
         filtered_df = filtered_df[filtered_df['VALIDASI'] == validation_filter]
     
     # Menampilkan informasi filter yang aktif
-    st.subheader('Filter Aktif')
-    st.write(f"Branch: {selected_branch}")
-    st.write(f"Status Validasi: {validation_filter}")
+    st.markdown('---')  # Garis pemisah
     
-    # Menampilkan jumlah data
-    st.write(f"Jumlah data: {len(filtered_df)}")
+    # Menampilkan jumlah data dalam box
+    st.metric("Jumlah Data", len(filtered_df))
     
     # Menampilkan DataFrame yang sudah difilter
     st.dataframe(filtered_df)
