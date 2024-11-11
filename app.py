@@ -8,9 +8,10 @@ st.title('Aplikasi Analisa Loan Top Up')
 st.markdown("""
 ## File yang dibutuhkan
 1. **LoanTopUp_Report.xlsx**
+    - Download data di Operational > Laporan Regional > Loan Top-Up Report, untuk penarikan data tersebut diambil per Awal bulan - Periode terakhir. Misalnya ketika dipilih tanggal 31/08/2024 maka data yang di ambil dari 01/08/2024 s.d. 31/08/2024
     - Data yang di perlukan sesuai periode audit!
-    - Rapihkan data terlebih dahulu, seperti ini ( https://www.canva.com/design/DAGWIkt0l-c/dViHAgm-S3tCGKDpunRUcw/edit )
-    - Hapus beberapa kolom yang tidak diperlukang (Biasanya ada kolom kosong di beberapa kolom yang ada)
+    - Rapihkan data terlebih dahulu, dan hapus beberapa kolom yang tidak diperlukan, seperti berikut: ( https://www.canva.com/design/DAGWJknvidU/i0CDo4Klvr5B9FAOUv7Icw/edit?utm_content=DAGWJknvidU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton )
+    - Ganti format Tanggal, dan Nominal seperti berikut: (https://www.canva.com/design/DAGWIkt0l-c/dViHAgm-S3tCGKDpunRUcw/edit?utm_content=DAGWIkt0l-c&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
     """)
 
 ## FUNGSI FORMAT NOMOR
